@@ -13,8 +13,8 @@ public class ExchangeService {
         this.redisTemplate = redisTemplate;
     }
 
-    public String getExchangeRate(String from, String to, String date) {
-        String cacheKey = String.format("fx:%s:%s:%s", from.toUpperCase(), to.toUpperCase(), date);
+    public String getExchangeRate(String from, String to) {
+        String cacheKey = String.format("fx:%s:%s", from.toUpperCase(), to.toUpperCase());
         String cachedRate = redisTemplate.opsForValue().get(cacheKey);
 
         if (cachedRate != null) {
@@ -24,11 +24,10 @@ public class ExchangeService {
         }
 
         System.out.println("Cache miss, starting new request to fx API.");
-        //value = getFxRateFromAPI(); just simulation for now
-        String fetchedRate = "5.45";
-        System.out.println("New rate found, storing on Redis: " + fetchedRate);
-        redisTemplate.opsForValue().set(cacheKey, fetchedRate, Duration.ofMinutes(10));
+        return getFxRateFromAPI(from.toUpperCase(), to.toUpperCase());
+    }
 
-        return fetchedRate;
+    private String getFxRateFromAPI(String from, String to) {
+
     }
 }

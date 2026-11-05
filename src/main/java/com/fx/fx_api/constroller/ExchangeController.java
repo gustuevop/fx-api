@@ -19,9 +19,8 @@ public class ExchangeController {
     @GetMapping
     public ResponseEntity<String> consultExchangeRate(
             @RequestParam String from,
-            @RequestParam String to,
-            @RequestParam String date) {
-        String response = exchangeService.getExchangeRate(from, to, date);
+            @RequestParam String to) {
+        String response = exchangeService.getExchangeRate(from, to);
         return ResponseEntity.ok(response);
     }
 }

@@ -20,7 +20,7 @@ public class ExchangeController {
     public ResponseEntity<String> consultExchangeRate(
             @RequestParam String from,
             @RequestParam String to) {
-        String response = exchangeService.getExchangeRate(from, to);
+        String response = exchangeService.getExchangeRateFromCache(from, to);
         return ResponseEntity.ok(response);
     }
 }

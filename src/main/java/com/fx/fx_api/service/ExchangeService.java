@@ -3,8 +3,6 @@ package com.fx.fx_api.service;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-
 @Service
 public class ExchangeService {
     private final StringRedisTemplate redisTemplate;
@@ -13,21 +11,20 @@ public class ExchangeService {
         this.redisTemplate = redisTemplate;
     }
 
-    public String getExchangeRate(String from, String to) {
-        String cacheKey = String.format("fx:%s:%s", from.toUpperCase(), to.toUpperCase());
+    /**
+     * Looks for cacheKey in cache and return its value;
+     * @param cacheKey key to be found in cache;
+     * @return null when there's no value stored on cacheKey in cache
+     */
+    public String getExchangeRateFromCache(String cacheKey) {
+        System.out.println("getExchangeRateFromCache cacheKey: " + cacheKey);
         String cachedRate = redisTemplate.opsForValue().get(cacheKey);
 
         if (cachedRate != null) {
-            System.out.println(String.format("Fx rate encountered on redis for %s to %s -> ",
-                    from.toUpperCase(), to.toUpperCase()) + cachedRate);
-            return cachedRate;
+            System.out.println("cachedRate: " + cachedRate);
+        } else {
+            System.out.println("Cache miss, starting new request to fx API.");
         }
-
-        System.out.println("Cache miss, starting new request to fx API.");
-        return getFxRateFromAPI(from.toUpperCase(), to.toUpperCase());
-    }
-
-    private String getFxRateFromAPI(String from, String to) {
-
+        return cachedRate;
     }
 }
